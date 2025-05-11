@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import Transactions from "../../components/dashboard/transactions";
-import * as getData from "../../utils/getdata";
+// import * as getData from "../../utils/getdata";
 import Sidebar from "../../components/sidebar";
 
 export const dynamic = 'force-dynamic';
@@ -10,8 +10,11 @@ export default async function Page() {
   // const { data: income } = await supabase.from("income").select(`*`);
   // const { data: purchases } = await supabase.from("purchases").select(`*`);
 
-  const income = await getData.getIncome(supabase);
-  const purchases = await getData.getPurchases(supabase);
+  // const income = await getData.getIncome(supabase);
+  // const purchases = await getData.getPurchases(supabase);
+
+  const { data: income } = await supabase.from("income").select(`*`);
+  const { data: purchases } = await supabase.from("purchases").select(`*`);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
