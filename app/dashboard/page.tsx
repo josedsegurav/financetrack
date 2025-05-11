@@ -8,8 +8,8 @@ export default async function Page() {
   // const { data: income } = await supabase.from("income").select(`*`);
   // const { data: purchases } = await supabase.from("purchases").select(`*`);
 
-  const income = await getData.getIncome();
-  const purchases = await getData.getPurchases();
+  const income = await getData.getIncome(supabase);
+  const purchases = await getData.getPurchases(supabase);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
@@ -17,7 +17,7 @@ export default async function Page() {
   function totalMonthlyNetIncome(month: any) {
     return income
       ? income.reduce(
-          (sum, eachIncome) =>
+          (sum: any, eachIncome: any) =>
             new Date(eachIncome.income_date).getMonth() === month
               ? sum + parseFloat(eachIncome.net_income)
               : sum,
@@ -29,7 +29,7 @@ export default async function Page() {
   function totalMonthlyPurchases(month: any) {
     return purchases
     ? purchases.reduce(
-        (sum, purchase) =>
+        (sum: any, purchase: any) =>
           new Date(purchase.purchase_date).getMonth() === month
             ? sum + parseFloat(purchase.amount)
             : sum,
@@ -48,7 +48,7 @@ export default async function Page() {
 
   const totalPurchasesTaxes = purchases
     ? purchases.reduce(
-        (sum, purchase) =>
+        (sum: any, purchase: any) =>
           sum + parseFloat(purchase.amount) * parseInt(purchase.taxes),
         0
       )

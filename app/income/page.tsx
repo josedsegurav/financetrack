@@ -1,11 +1,12 @@
 
-
+import { createClient } from "@/utils/supabase/server";
 import FiltersAndMovements from "../../components/income/filtermovements"
 import * as getData from "../../utils/getdata";
 import Sidebar from "@/components/sidebar";
 
 export default async function Purchases() {
-  const income = await getData.getIncome();
+  const supabase = await createClient();
+  const income = await getData.getIncome(supabase);
 
   const currentDate = new Date();
   const currentMonth = new Intl.DateTimeFormat("en-US", { month: "long" }).format(currentDate);
@@ -13,30 +14,30 @@ export default async function Purchases() {
 //   // Calculate totals
   const totalGrossIncome =
   income ? income.filter(
-    (eachIncome) =>
+    (eachIncome: any) =>
       new Date(eachIncome.income_date).getFullYear() == currentDate.getFullYear()).filter(
-        (eachIncome) =>
+        (eachIncome: any) =>
           new Date(eachIncome.income_date).getMonth() == currentDate.getMonth()
-      ).reduce((sum, eachIncome) => sum + eachIncome.gross_income, 0)
+      ).reduce((sum: any, eachIncome: any) => sum + eachIncome.gross_income, 0)
   : 0;
 
     const totalNetIncome =
     income ? income.filter(
-      (eachIncome) =>
+      (eachIncome: any) =>
         new Date(eachIncome.income_date).getFullYear() == currentDate.getFullYear()).filter(
-          (eachIncome) =>
+          (eachIncome: any) =>
             new Date(eachIncome.income_date).getMonth() == currentDate.getMonth()
-        ).reduce((sum, eachIncome) => sum + eachIncome.net_income, 0)
+        ).reduce((sum: any, eachIncome: any) => sum + eachIncome.net_income, 0)
     : 0;
 
   const totalTaxes =
   income ? income.filter(
-    (eachIncome) =>
+    (eachIncome: any) =>
       new Date(eachIncome.income_date).getFullYear() == currentDate.getFullYear()).filter(
-        (eachIncome) =>
+        (eachIncome: any) =>
           new Date(eachIncome.income_date).getMonth() == currentDate.getMonth()
       ).reduce(
-        (sum, eachIncome) =>
+        (sum: any, eachIncome: any) =>
           sum + eachIncome.gross_income - eachIncome.net_income,
         0
       )

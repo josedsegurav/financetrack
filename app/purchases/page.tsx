@@ -1,32 +1,33 @@
-
+import { createClient } from "@/utils/supabase/server";
 import FiltersAndTransactions from "../../components/purchases/filterstransactions"
 import * as getData from "../../utils/getdata";
 import Sidebar from "@/components/sidebar";
 
 export default async function Purchases() {
-  const purchases = await getData.getPurchasesDetail();
-    const categories = await getData.categories();
-  const stores = await getData.stores();
+  const supabase = await createClient();
+  const purchases = await getData.getPurchasesDetail(supabase);
+    const categories = await getData.categories(supabase);
+  const stores = await getData.stores(supabase);
 
   const currentDate = new Date();
   const currentMonth = new Intl.DateTimeFormat("en-US", { month: "long" }).format(currentDate);
 
 //   // Calculate totals
   const totalPurchases = purchases
-    ? purchases.filter((purchase) => {
+    ? purchases.filter((purchase: any) => {
       new Date(purchase.purchase_date).getFullYear() === currentDate.getFullYear()
-    }).filter((purchase) => {
+    }).filter((purchase: any) => {
       new Date(purchase.purchase_date).getMonth() === currentDate.getMonth()
-    }).reduce((sum, purchase) => sum + purchase.amount, 0)
+    }).reduce((sum: any, purchase: any) => sum + purchase.amount, 0)
     : 0;
 
   const totalTaxes = purchases
-    ? purchases.filter((purchase) => {
+    ? purchases.filter((purchase: any) => {
       new Date(purchase.purchase_date).getFullYear() === currentDate.getFullYear()
-    }).filter((purchase) => {
+    }).filter((purchase: any) => {
       new Date(purchase.purchase_date).getMonth() === currentDate.getMonth()
     }).reduce(
-        (sum, purchase) =>
+        (sum: any, purchase: any) =>
           sum + purchase.amount * purchase.taxes,
         0
       )
